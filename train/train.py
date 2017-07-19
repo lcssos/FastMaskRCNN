@@ -164,11 +164,7 @@ def train():
 
     ## data
     image, ih, iw, gt_boxes, gt_masks, num_instances, img_id = \
-        datasets.get_dataset(FLAGS.dataset_name, 
-                             FLAGS.dataset_split_name, 
-                             FLAGS.dataset_dir, 
-                             FLAGS.im_batch,
-                             is_training=True)
+        datasets.get_dataset(FLAGS.dataset_name, FLAGS.dataset_split_name, FLAGS.dataset_dir, FLAGS.im_batch, is_training=True)
 
     data_queue = tf.RandomShuffleQueue(capacity=32, min_after_dequeue=16,
             dtypes=(

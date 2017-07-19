@@ -4,10 +4,16 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+
+import matplotlib as mpl
+mpl.use('TkAgg')
+
+
 import tensorflow as tf
 
 from libs.datasets import download_and_convert_coco
 from libs.configs import config_v1
+
 
 FLAGS = tf.app.flags.FLAGS
 
