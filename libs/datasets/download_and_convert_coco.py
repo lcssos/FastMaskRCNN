@@ -243,7 +243,39 @@ def _add_to_tfrecord(record_dir, image_dir, annotation_dir, split_name):
     """Loads image files and writes files to a TFRecord.
   Note: masks and bboxes will lose shape info after converting to string.
   """
-
+    """
+{
+	info:{
+		description:'This is stable 1.0 version of the 2014 MS COCO dataset.',
+		url:'http://mscoco.org',
+		version:'1.0',
+		year:2014,
+		"contributor": "Microsoft COCO group",
+		"date_created": "2015-01-27 09:11:52.357475"
+	},
+	"images":[
+		{
+			"license": 5, 
+			"file_name": "COCO_train2014_000000057870.jpg", 
+			"coco_url": "http://mscoco.org/images/57870", 
+			"height": 480, 
+			"width": 640, 
+			"date_captured": "2013-11-14 16:28:13", 
+			"flickr_url": "http://farm4.staticflickr.com/3153/2970773875_164f0c0b83_z.jpg", 
+			"id": 57870
+		},{
+			"license": 5, 
+			"file_name": "COCO_train2014_000000384029.jpg", 
+			"coco_url": "http://mscoco.org/images/384029", 
+			"height": 429, 
+			"width": 640, 
+			"date_captured": "2013-11-14 16:29:45", 
+			"flickr_url": "http://farm3.staticflickr.com/2422/3577229611_3a3235458a_z.jpg", 
+			"id": 384029
+		}
+	]
+}
+    """
     assert split_name in ['train2014', 'val2014', 'valminusminival2014', 'minival2014']
     annFile = os.path.join(annotation_dir, 'instances_%s.json' % (split_name))
 

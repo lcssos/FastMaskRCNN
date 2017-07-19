@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
- 
+
 import functools
 import os, sys
 import time
@@ -24,9 +24,6 @@ import libs.nets.resnet_v1 as resnet_v1
 from train.train_utils import _configure_learning_rate, _configure_optimizer, \
   _get_variables_to_train, _get_init_fn, get_var_list_to_restore
 
-from PIL import Image, ImageFont, ImageDraw, ImageEnhance
-from libs.datasets import download_and_convert_coco
-#from libs.datasets.download_and_convert_coco import _cat_id_to_cls_name
 from libs.visualization.pil_utils import cat_id_to_cls_name, draw_img, draw_bbox
 
 FLAGS = tf.app.flags.FLAGS
@@ -297,7 +294,7 @@ def train():
             # print (cat_id_to_cls_name(np.unique(np.argmax(np.asarray(final_gt_clsnp),axis=1)))[1:])
             # print (cat_id_to_cls_name(np.unique(np.asarray(gt_boxesnp, dtype=np.uint8)[:,4])))
             print (cat_id_to_cls_name(np.unique(np.argmax(np.asarray(tmp_3np),axis=1)))[1:])
-            #print (cat_id_to_cls_name(np.unique(np.argmax(np.asarray(gt_boxesnp)[:,4],axis=1))))
+            # print (cat_id_to_cls_name(np.unique(np.argmax(np.asarray(gt_boxesnp)[:,4],axis=1))))
             print ("classes")
             print (cat_id_to_cls_name(np.unique(np.argmax(np.array(tmp_4np),axis=1))))
             # print (np.asanyarray(tmp_3np))
