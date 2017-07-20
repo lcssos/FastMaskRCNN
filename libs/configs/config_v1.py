@@ -1,3 +1,4 @@
+# coding=utf-8
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -7,20 +8,14 @@ import tensorflow as tf
 ##########################
 #                  restore
 ##########################
-tf.app.flags.DEFINE_string(
-    'train_dir', './output/mask_rcnn/',
-    'Directory where checkpoints and event logs are written to.')
+tf.app.flags.DEFINE_string('train_dir', './output/mask_rcnn/', 'Directory where checkpoints and event logs are written to.')
 
-tf.app.flags.DEFINE_string(
-    'pretrained_model', './data/pretrained_models/resnet_v1_50.ckpt',
-    'Path to pretrained model')
+tf.app.flags.DEFINE_string('pretrained_model', './data/pretrained_models/resnet_v1_50.ckpt', 'Path to pretrained model')
 
 ##########################
 #                  network
 ##########################
-tf.app.flags.DEFINE_string(
-    'network', 'resnet50',
-    'name of backbone network')
+tf.app.flags.DEFINE_string('network', 'resnet50', 'name of backbone network')
 
 ##########################
 #                  dataset
@@ -33,30 +28,18 @@ tf.app.flags.DEFINE_integer(
     'num_readers', 4,
     'The number of parallel readers that read data from the dataset.')
 
-tf.app.flags.DEFINE_string(
-    'dataset_name', 'coco',
-    'The name of the dataset to load.')
+tf.app.flags.DEFINE_string('dataset_name', 'coco', 'The name of the dataset to load.')
 
-tf.app.flags.DEFINE_string(
-    'dataset_split_name', 'train2014',
-    'The name of the train/test/val split.')
+tf.app.flags.DEFINE_string('dataset_split_name', 'train2014', 'The name of the train/test/val split.')
 
-tf.app.flags.DEFINE_string(
-    'dataset_dir', 'data/coco/',
-    'The directory where the dataset files are stored.')
+tf.app.flags.DEFINE_string('dataset_dir', 'data/coco/', 'The directory where the dataset files are stored.')
 
-tf.app.flags.DEFINE_integer(
-    'im_batch', 1,
-    'number of images in a mini-batch')
+tf.app.flags.DEFINE_integer('im_batch', 1, 'number of images in a mini-batch')
 
 
-tf.app.flags.DEFINE_integer(
-    'num_preprocessing_threads', 4,
-    'The number of threads used to create the batches.')
+tf.app.flags.DEFINE_integer('num_preprocessing_threads', 4, 'The number of threads used to create the batches.')
 
-tf.app.flags.DEFINE_integer(
-    'log_every_n_steps', 10,
-    'The frequency with which logs are print.')
+tf.app.flags.DEFINE_integer('log_every_n_steps', 10, 'The frequency with which logs are print.')
 
 tf.app.flags.DEFINE_integer(
     'save_summaries_secs', 60,
@@ -74,8 +57,7 @@ tf.app.flags.DEFINE_integer(
 # Optimization Flags #
 ######################
 
-tf.app.flags.DEFINE_float(
-    'weight_decay', 0.00005, 'The weight decay on the model weights.')
+tf.app.flags.DEFINE_float('weight_decay', 0.00005, 'The weight decay on the model weights.')
 
 tf.app.flags.DEFINE_string(
     'optimizer', 'momentum',
@@ -90,13 +72,9 @@ tf.app.flags.DEFINE_float(
     'adagrad_initial_accumulator_value', 0.1,
     'Starting value for the AdaGrad accumulators.')
 
-tf.app.flags.DEFINE_float(
-    'adam_beta1', 0.9,
-    'The exponential decay rate for the 1st moment estimates.')
+tf.app.flags.DEFINE_float('adam_beta1', 0.9, 'The exponential decay rate for the 1st moment estimates.')
 
-tf.app.flags.DEFINE_float(
-    'adam_beta2', 0.999,
-    'The exponential decay rate for the 2nd moment estimates.')
+tf.app.flags.DEFINE_float('adam_beta2', 0.999, 'The exponential decay rate for the 2nd moment estimates.')
 
 tf.app.flags.DEFINE_float('opt_epsilon', 1.0, 'Epsilon term for the optimizer.')
 
@@ -125,23 +103,17 @@ tf.app.flags.DEFINE_float('rmsprop_decay', 0.99, 'Decay term for RMSProp.')
 # Learning Rate Flags #
 #######################
 
-tf.app.flags.DEFINE_string(
-    'learning_rate_decay_type', 'exponential',
-    'Specifies how the learning rate is decayed. One of "fixed", "exponential",'
-    ' or "polynomial"')
+tf.app.flags.DEFINE_string('learning_rate_decay_type', 'exponential', 'Specifies how the learning rate is decayed. One of "fixed", "exponential", or "polynomial"')
 
-tf.app.flags.DEFINE_float('learning_rate', 0.002,
-                          'Initial learning rate.')
+tf.app.flags.DEFINE_float('learning_rate', 0.002, 'Initial learning rate.')
 
-tf.app.flags.DEFINE_float(
-    'end_learning_rate', 0.00001,
-    'The minimal end learning rate used by a polynomial decay learning rate.')
+tf.app.flags.DEFINE_float('end_learning_rate', 0.00001, 'The minimal end learning rate used by a polynomial decay learning rate.')
 
 tf.app.flags.DEFINE_float(
     'label_smoothing', 0.0, 'The amount of label smoothing.')
 
-tf.app.flags.DEFINE_float(
-    'learning_rate_decay_factor', 0.94, 'Learning rate decay factor.')
+#  学习率衰减因子
+tf.app.flags.DEFINE_float('learning_rate_decay_factor', 0.94, 'Learning rate decay factor.')
 
 tf.app.flags.DEFINE_float(
     'num_epochs_per_decay', 2.0,
@@ -210,6 +182,7 @@ tf.app.flags.DEFINE_string(
     'Comma-separated list of scopes of variables to include when restoring '
     'from a checkpoint.')
 
+# 逗号分隔的scopes列表，用于过滤需要训练的变量集
 tf.app.flags.DEFINE_string(
     'trainable_scopes', None,
     'Comma-separated list of scopes to filter the set of variables to train.'

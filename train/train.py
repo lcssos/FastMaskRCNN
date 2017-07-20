@@ -157,8 +157,7 @@ def train():
     """The main function that runs training"""
 
     ## data
-    image, ih, iw, gt_boxes, gt_masks, num_instances, img_id = \
-        datasets.get_dataset(FLAGS.dataset_name, FLAGS.dataset_split_name, FLAGS.dataset_dir, FLAGS.im_batch, is_training=True)
+    image, ih, iw, gt_boxes, gt_masks, num_instances, img_id = datasets.get_dataset(FLAGS.dataset_name, FLAGS.dataset_split_name, FLAGS.dataset_dir, FLAGS.im_batch, is_training=True)
 
     # '''随机队列操作'''
     # '''最大长度32，最小长度16，类型为元组的随机队列'''

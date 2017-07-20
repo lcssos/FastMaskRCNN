@@ -13,7 +13,7 @@ FLAGS = tf.app.flags.FLAGS
 
 def _configure_optimizer(learning_rate):
   """Configures the optimizer used for training.
-
+    配置优化器，用于训练
   Args:
     learning_rate: A scalar or `Tensor` learning rate.
 
@@ -45,7 +45,7 @@ def _configure_optimizer(learning_rate):
 
 def _configure_learning_rate(num_samples_per_epoch, global_step):
   """Configures the learning rate.
-
+        配置学习率
   Args:
     num_samples_per_epoch: The number of samples in each epoch of training.
     global_step: The global_step tensor.
@@ -61,10 +61,13 @@ def _configure_learning_rate(num_samples_per_epoch, global_step):
     decay_steps /= FLAGS.replicas_to_aggregate
 
   if FLAGS.learning_rate_decay_type == 'exponential':
+    # 指数衰减,每decay_steps步进行一次衰减
     return tf.train.exponential_decay(FLAGS.learning_rate, global_step, decay_steps, FLAGS.learning_rate_decay_factor, staircase=True, name='exponential_decay_learning_rate')
   elif FLAGS.learning_rate_decay_type == 'fixed':
+      # 固定学习率
     return tf.constant(FLAGS.learning_rate, name='fixed_learning_rate')
   elif FLAGS.learning_rate_decay_type == 'polynomial':
+    # 多项式衰减？？？
     return tf.train.polynomial_decay(FLAGS.learning_rate, global_step, decay_steps, FLAGS.end_learning_rate, power=0.9, cycle=False, name='polynomial_decay_learning_rate')
   else:
     raise ValueError('learning_rate_decay_type [%s] was not recognized', FLAGS.learning_rate_decay_type)
@@ -73,6 +76,7 @@ def _get_variables_to_train():
   """Returns a list of variables to train.
 
   Returns:
+      返回需要被优化器训练的变量列表
     A list of variables to train by the optimizer.
   """
   if FLAGS.trainable_scopes is None:
@@ -134,6 +138,7 @@ def _get_init_fn():
 
 def get_var_list_to_restore():
   """Choose which vars to restore, ignore vars by setting --checkpoint_exclude_scopes """
+  # 选择需要加载的变量集数组
 
   variables_to_restore = []
   if FLAGS.checkpoint_exclude_scopes is not None:
