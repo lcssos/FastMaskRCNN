@@ -1,3 +1,4 @@
+# coding=utf-8
 # Copyright 2016 The TensorFlow Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -191,16 +192,23 @@ def resnet_v1(inputs,
             if output_stride % 4 != 0:
               raise ValueError('The output_stride needs to be a multiple of 4.')
             output_stride /= 4
+          # 创建resnet最前面的64输出通道的步长为2的7*7卷积
           net = resnet_utils.conv2d_same(net, 64, 7, stride=2, scope='conv1')
+          # 然后接最大池化
           net = slim.max_pool2d(net, [3, 3], stride=2, scope='pool1')
+        # 经历过两个步长为2的层图片缩为1/4
+        # 将残差学习模块组生成好
         net = resnet_utils.stack_blocks_dense(net, blocks, output_stride)
         if global_pool:
           # Global average pooling.
+          # tf.reduce_mean实现全局平均池化效率比avg_pool高
           net = tf.reduce_mean(net, [1, 2], name='pool5', keep_dims=True)
         if num_classes is not None:
-          net = slim.conv2d(net, num_classes, [1, 1], activation_fn=None,
-                            normalizer_fn=None, scope='logits')
+          # 无激活函数和正则项
+          # 添加一个输出通道num_classes的1*1的卷积
+          net = slim.conv2d(net, num_classes, [1, 1], activation_fn=None, normalizer_fn=None, scope='logits')
         if spatial_squeeze:
+            # 降维，将高、宽维度去掉，保留batch,channel维度？？？
           logits = tf.squeeze(net, [1, 2], name='SpatialSqueeze')
         # Convert end_points_collection into a dictionary of end_points.
         end_points = slim.utils.convert_collection_to_dict(end_points_collection)
