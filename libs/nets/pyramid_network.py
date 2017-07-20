@@ -562,6 +562,17 @@ def decode_output(outputs):
     """decode outputs into boxes and masks"""
     return [], [], []
 
+'''
+pyramid_map:{'C1':'resnet_v1_50/conv1/Relu:0',
+               'C2':'resnet_v1_50/block1/unit_2/bottleneck_v1',
+               'C3':'resnet_v1_50/block2/unit_3/bottleneck_v1',
+               'C4':'resnet_v1_50/block3/unit_5/bottleneck_v1',
+               'C5':'resnet_v1_50/block4/unit_3/bottleneck_v1',
+               }
+num_classes:81
+base_anchors:9
+loss_weights=[0.2, 0.2, 1.0, 0.2, 1.0]
+'''
 def build(end_points, image_height, image_width, pyramid_map, 
         num_classes,
         base_anchors,
@@ -575,9 +586,7 @@ def build(end_points, image_height, image_width, pyramid_map,
     for p in pyramid:
         print (p)
 
-    outputs = \
-        build_heads(pyramid, image_height, image_width, num_classes, base_anchors, 
-                    is_training=is_training, gt_boxes=gt_boxes)
+    outputs = build_heads(pyramid, image_height, image_width, num_classes, base_anchors, is_training=is_training, gt_boxes=gt_boxes)
 
     if is_training:
         loss, losses, batch_info = build_losses(pyramid, outputs, 

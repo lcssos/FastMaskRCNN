@@ -163,21 +163,32 @@ def train():
     image, ih, iw, gt_boxes, gt_masks, num_instances, img_id = \
         datasets.get_dataset(FLAGS.dataset_name, FLAGS.dataset_split_name, FLAGS.dataset_dir, FLAGS.im_batch, is_training=True)
 
+    # '''随机队列操作'''
+    # '''最大长度32，最小长度16，类型为元组的随机队列'''
     data_queue = tf.RandomShuffleQueue(capacity=32, min_after_dequeue=16,
             dtypes=(
                 image.dtype, ih.dtype, iw.dtype, 
                 gt_boxes.dtype, gt_masks.dtype, 
-                num_instances.dtype, img_id.dtype)) 
+                num_instances.dtype, img_id.dtype))
+
+    # 将数据加入队列
     enqueue_op = data_queue.enqueue((image, ih, iw, gt_boxes, gt_masks, num_instances, img_id))
+
+    # 创建QueueRunner
+    # 用多个线程向队列添加数据
+    # 4个线程？？？
     data_queue_runner = tf.train.QueueRunner(data_queue, [enqueue_op] * 4)
     tf.add_to_collection(tf.GraphKeys.QUEUE_RUNNERS, data_queue_runner)
+
+    # 出队列
     (image, ih, iw, gt_boxes, gt_masks, num_instances, img_id) =  data_queue.dequeue()
+    # 返回一个tensor
     im_shape = tf.shape(image)
     image = tf.reshape(image, (im_shape[0], im_shape[1], im_shape[2], 3))
 
-    ## network
-    logits, end_points, pyramid_map = network.get_network(FLAGS.network, image,
-            weight_decay=FLAGS.weight_decay, is_training=True)
+    # network
+    logits, end_points, pyramid_map = network.get_network(FLAGS.network, image, weight_decay=FLAGS.weight_decay, is_training=True)
+
     outputs = pyramid_network.build(end_points, im_shape[1], im_shape[2], pyramid_map,
             num_classes=81,
             base_anchors=9,
