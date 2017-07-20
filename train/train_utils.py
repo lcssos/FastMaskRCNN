@@ -24,38 +24,19 @@ def _configure_optimizer(learning_rate):
     ValueError: if FLAGS.optimizer is not recognized.
   """
   if FLAGS.optimizer == 'adadelta':
-    optimizer = tf.train.AdadeltaOptimizer(
-        learning_rate,
-        rho=FLAGS.adadelta_rho,
-        epsilon=FLAGS.opt_epsilon)
+    optimizer = tf.train.AdadeltaOptimizer(learning_rate, rho=FLAGS.adadelta_rho, epsilon=FLAGS.opt_epsilon)
   elif FLAGS.optimizer == 'adagrad':
-    optimizer = tf.train.AdagradOptimizer(
-        learning_rate,
-        initial_accumulator_value=FLAGS.adagrad_initial_accumulator_value)
+    optimizer = tf.train.AdagradOptimizer(learning_rate, initial_accumulator_value=FLAGS.adagrad_initial_accumulator_value)
   elif FLAGS.optimizer == 'adam':
-    optimizer = tf.train.AdamOptimizer(
-        learning_rate,
-        beta1=FLAGS.adam_beta1,
-        beta2=FLAGS.adam_beta2,
-        epsilon=FLAGS.opt_epsilon)
+    optimizer = tf.train.AdamOptimizer(learning_rate, beta1=FLAGS.adam_beta1, beta2=FLAGS.adam_beta2, epsilon=FLAGS.opt_epsilon)
   elif FLAGS.optimizer == 'ftrl':
-    optimizer = tf.train.FtrlOptimizer(
-        learning_rate,
-        learning_rate_power=FLAGS.ftrl_learning_rate_power,
-        initial_accumulator_value=FLAGS.ftrl_initial_accumulator_value,
+    optimizer = tf.train.FtrlOptimizer(learning_rate, learning_rate_power=FLAGS.ftrl_learning_rate_power, initial_accumulator_value=FLAGS.ftrl_initial_accumulator_value,
         l1_regularization_strength=FLAGS.ftrl_l1,
         l2_regularization_strength=FLAGS.ftrl_l2)
   elif FLAGS.optimizer == 'momentum':
-    optimizer = tf.train.MomentumOptimizer(
-        learning_rate,
-        momentum=FLAGS.momentum,
-        name='Momentum')
+    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=FLAGS.momentum, name='Momentum')
   elif FLAGS.optimizer == 'rmsprop':
-    optimizer = tf.train.RMSPropOptimizer(
-        learning_rate,
-        decay=FLAGS.rmsprop_decay,
-        momentum=FLAGS.rmsprop_momentum,
-        epsilon=FLAGS.opt_epsilon)
+    optimizer = tf.train.RMSPropOptimizer(learning_rate, decay=FLAGS.rmsprop_decay, momentum=FLAGS.rmsprop_momentum, epsilon=FLAGS.opt_epsilon)
   elif FLAGS.optimizer == 'sgd':
     optimizer = tf.train.GradientDescentOptimizer(learning_rate)
   else:
@@ -75,31 +56,18 @@ def _configure_learning_rate(num_samples_per_epoch, global_step):
   Raises:
     ValueError: if
   """
-  decay_steps = int(num_samples_per_epoch / FLAGS.batch_size *
-                    FLAGS.num_epochs_per_decay)
+  decay_steps = int(num_samples_per_epoch / FLAGS.batch_size * FLAGS.num_epochs_per_decay)
   if FLAGS.sync_replicas:
     decay_steps /= FLAGS.replicas_to_aggregate
 
   if FLAGS.learning_rate_decay_type == 'exponential':
-    return tf.train.exponential_decay(FLAGS.learning_rate,
-                                      global_step,
-                                      decay_steps,
-                                      FLAGS.learning_rate_decay_factor,
-                                      staircase=True,
-                                      name='exponential_decay_learning_rate')
+    return tf.train.exponential_decay(FLAGS.learning_rate, global_step, decay_steps, FLAGS.learning_rate_decay_factor, staircase=True, name='exponential_decay_learning_rate')
   elif FLAGS.learning_rate_decay_type == 'fixed':
     return tf.constant(FLAGS.learning_rate, name='fixed_learning_rate')
   elif FLAGS.learning_rate_decay_type == 'polynomial':
-    return tf.train.polynomial_decay(FLAGS.learning_rate,
-                                     global_step,
-                                     decay_steps,
-                                     FLAGS.end_learning_rate,
-                                     power=0.9,
-                                     cycle=False,
-                                     name='polynomial_decay_learning_rate')
+    return tf.train.polynomial_decay(FLAGS.learning_rate, global_step, decay_steps, FLAGS.end_learning_rate, power=0.9, cycle=False, name='polynomial_decay_learning_rate')
   else:
-    raise ValueError('learning_rate_decay_type [%s] was not recognized',
-                     FLAGS.learning_rate_decay_type)
+    raise ValueError('learning_rate_decay_type [%s] was not recognized', FLAGS.learning_rate_decay_type)
 
 def _get_variables_to_train():
   """Returns a list of variables to train.

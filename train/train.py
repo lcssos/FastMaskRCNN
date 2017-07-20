@@ -51,8 +51,7 @@ def solve(global_step):
     variables_to_train = _get_variables_to_train()
     # update_op = optimizer.minimize(total_loss)
     gradients = optimizer.compute_gradients(total_loss, var_list=variables_to_train)
-    grad_updates = optimizer.apply_gradients(gradients, 
-            global_step=global_step)
+    grad_updates = optimizer.apply_gradients(gradients, global_step=global_step)
     update_ops.append(grad_updates)
     
     # update moving mean and variance
@@ -122,13 +121,11 @@ def restore(sess):
             ############
 
             restorer.restore(sess, checkpoint_path)
-            print ('restored previous model %s from %s'\
-                    %(checkpoint_path, FLAGS.train_dir))
+            print ('restored previous model %s from %s'%(checkpoint_path, FLAGS.train_dir))
             time.sleep(2)
             return
         except:
-            print ('--restore_previous_if_exists is set, but failed to restore in %s %s'\
-                    % (FLAGS.train_dir, checkpoint_path))
+            print ('--restore_previous_if_exists is set, but failed to restore in %s %s' % (FLAGS.train_dir, checkpoint_path))
             time.sleep(2)
 
      if FLAGS.pretrained_model:
@@ -233,10 +230,7 @@ def train():
     
     gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.95)
     sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
-    init_op = tf.group(
-            tf.global_variables_initializer(),
-            tf.local_variables_initializer()
-            )
+    init_op = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
     sess.run(init_op)
 
     summary_op = tf.summary.merge_all()
@@ -253,8 +247,7 @@ def train():
     threads = []
     # print (tf.get_collection(tf.GraphKeys.QUEUE_RUNNERS))
     for qr in tf.get_collection(tf.GraphKeys.QUEUE_RUNNERS):
-        threads.extend(qr.create_threads(sess, coord=coord, daemon=True,
-                                         start=True))
+        threads.extend(qr.create_threads(sess, coord=coord, daemon=True, start=True))
 
     tf.train.start_queue_runners(sess=sess, coord=coord)
     saver = tf.train.Saver(max_to_keep=20)
